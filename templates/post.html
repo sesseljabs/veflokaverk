@@ -1,0 +1,9 @@
+{% extends "default.html" %}
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<h1>{{ post["title"] }}</h1>
+<p style="font-size: 20px;">Sett inn af {{ post["username"] }} þann {{ post["posttime"] | date }}</p>
+<p>{{ post["content"] }}</p>
+{% endblock %}

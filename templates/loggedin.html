@@ -1,0 +1,7 @@
+<blockquote class="loggedin">
+        {% if session["loggedin"] %}
+            <p>Þú ert skráð/ur inn, {{ session["loggedin"] }}, <a href="/logout">Skrá út</a></p>
+        {% else %}
+            <p>Skráðu þig inn til að skoða pósta. <a href="/login">Skrá inn</a></p>
+        {% endif %}
+    </blockquote>

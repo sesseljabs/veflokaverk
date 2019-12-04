@@ -1,0 +1,16 @@
+{% extends "default.html" %}
+{% block title %}Notendur{% endblock %}
+{% block content %}
+<table>
+    <tr>
+        <th>Notendanafn</th>
+        <th>Netfang</th>
+    </tr>
+    {% for i in users %}
+    <tr>
+        <td>{{i["user_name"]}}</td>
+        <td>{{i["user_email"]}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

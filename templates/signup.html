@@ -1,0 +1,25 @@
+{% extends "default.html" %}
+{% block title %}Búa til notanda{% endblock %}
+
+{% block content %}
+{% if error %}
+<h2>{{ error }}</h2>
+{% endif %}
+<form method="POST" action="/signup/submit">
+    <fieldset>
+        <legend>Búa til notanda</legend>
+        <label>Notendanafn:<br>
+            <input type="text" name="username" required placeholder="notendanafn"><br>
+        </label>
+
+        <label>Netfang:<br>
+            <input type="email" name="email" required placeholder="netfang@postur.is"><br>
+        </label>
+
+        <label>Lykilorð:<br>
+            <input type="password" name="password" required><br>
+        </label>
+        <input type="submit" value="Nýskrá">
+    </fieldset>
+</form>
+{% endblock %}

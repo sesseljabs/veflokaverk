@@ -1,0 +1,23 @@
+{% extends "default.html" %}
+{% block title %}
+Mínir póstar
+{% endblock %}
+
+{% block content %}
+<table class="basetable">
+    <thead>
+        <tr>
+            <th>Titill</th>
+            <th>Notandi</th>
+            <th>Tímasetning</th>
+        </tr>
+    </thead>
+    {% for i in posts %}
+    <tr>
+        <td><a href="/post/{{ i['id'] }}">{{ i["title"] }}</a></td>
+        <td>{{ i["username"] }}</td>
+        <td>{{ i["posttime"] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
