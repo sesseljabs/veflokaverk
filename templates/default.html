@@ -18,8 +18,14 @@
             <h1><a href="/">Vefsíða</a></h1>
             <nav>
                 <a href="/">Heim</a>
+                {% if session.get("loggedin") %}
+                <a href="/logout">Skrá út</a>
+                <a href="/createpost">Skrifa póst</a>
+                <a href="/post">Mínir póstar</a>
+                {% else %}
                 <a href="/login">Innskráning</a>
                 <a href="/signup">Nýskráning</a>
+                {% endif %}
                 <a href="https://github.com/sesseljabs/veflokaverk" target="_blank">Verkefnið á github</a>
             </nav>
         </header>

@@ -1,0 +1,18 @@
+{% extends "default.html" %}
+{% block title %}Búa til póst
+{% endblock %}
+
+{% block content %}
+<form method="POST" action="/createpost/submit">
+    <fieldset>
+        <legend>Búa til póst</legend>
+        <label>Titill<br>
+            <input type="text" name="title" required><br>
+        </label>
+        <label>Texti<br>
+            <textarea rows="10" cols="50" name="post" required></textarea><br>
+        </label>
+        <input type="submit" value="Búa til póst">
+    </fieldset>
+</form>
+{% endblock %}

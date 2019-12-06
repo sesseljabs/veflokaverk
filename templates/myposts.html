@@ -4,12 +4,15 @@ Mínir póstar
 {% endblock %}
 
 {% block content %}
+{% if lenposts != 0 %}
 <table class="basetable">
     <thead>
         <tr>
             <th>Titill</th>
             <th>Notandi</th>
             <th>Tímasetning</th>
+            <th>Breyta</th>
+            <th>Eyða</th>
         </tr>
     </thead>
     {% for i in posts %}
@@ -17,7 +20,13 @@ Mínir póstar
         <td><a href="/post/{{ i['id'] }}">{{ i["title"] }}</a></td>
         <td>{{ i["username"] }}</td>
         <td>{{ i["posttime"] }}</td>
+        <td><a href="/breyta/{{ i['id'] }}">Breyta</a></td>
+        <td><a href="/eyda/{{ i['id'] }}">Eyða</a></td>
     </tr>
     {% endfor %}
 </table>
+{% else %}
+<h1>Þú hefur ekki sett inn neina pósta</h1>
+<h2><a href="/createpost">Búa til póst</a></h2>
+{% endif %}
 {% endblock %}

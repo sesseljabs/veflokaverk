@@ -1,6 +1,6 @@
 from flask import Flask, render_template, session, url_for, request, redirect, escape, flash
 from flask import *
-from datetime import datetime
+from datetime import datetime,date
 import pymysql.cursors
 import os
 
@@ -8,7 +8,12 @@ app = Flask(__name__)
 
 app.secret_key = os.urandom(16)
 
-connection = pymysql.connect(host="tsuts.tskoli.is", user="1609022560", password="mypassword", db="1609022560_verk7", charset="utf8mb4", cursorclass=pymysql.cursors.DictCursor)
+try:
+    connection = pymysql.connect(host="tsuts.tskoli.is", user="1609022560", password="mypassword", db="1609022560_verk7", charset="utf8mb4", cursorclass=pymysql.cursors.DictCursor)
+
+except pymysql.OperationalError:
+    print("\n\n\n#######\nDatabase virkar ekki\n#######\n\n\n")
+    exit()
 
 def inttomon(i):
     dicta = {
@@ -38,8 +43,11 @@ def index():
     with connection.cursor() as cursor:
         sql = "select * from 1609022560_verk7.posts"
         cursor.execute(sql)
-        listi = cursor.fetchall()
+        listinn = cursor.fetchall()
+        listinn = [i for i in listinn]
+        listi = sorted(listinn, key=lambda k: k['posttime'], reverse=True) 
     return render_template("index.html", listi=listi, session=session)
+
 @app.route("/login")
 def login():
     return render_template("login.html")
@@ -107,11 +115,14 @@ def myposts():
         with connection.cursor() as cursor:
             sql = "select * from posts where username='%s'" % session["loggedin"]
             cursor.execute(sql)
-            posts = cursor.fetchall()
+            listi = cursor.fetchall()
+            lenposts = len(listi)
+            listi = [i for i in listi]
+            posts = sorted(listi, key=lambda k: k['posttime'], reverse=True)
     else:
         return render_template("custom.html", content="Þú verður að vera skráður inn til að gera þetta")
 
-    return render_template("myposts.html", posts=posts)
+    return render_template("myposts.html", posts=posts, lenposts=len(posts))
 
 @app.route("/post/<id>")
 def posts(id):
@@ -122,6 +133,57 @@ def posts(id):
         post["posttime"] = str(post["posttime"])
 
     return render_template("post.html", post=post)
+
+@app.route("/createpost")
+def createpost():
+    return render_template("createpost.html")
+
+@app.route("/createpost/submit", methods=["GET","POST"])
+def createsubmit():
+    if session.get('loggedin') == None:
+        return redirect("/")
+    if request.method == "POST":
+        data = {
+            "title":request.form["title"],
+            "post":request.form["post"]
+        }
+
+    username = session.get('loggedin')
+    time = datetime.now()
+    time = time.strftime("%Y-%m-%d %H:%M:%S")
+    time = str(time)
+    print(data["post"])
+    with connection.cursor() as cursor:
+        sql = f"insert into posts (username,posttime,content,title) values ('{username}','{time}', '{data['post']}', '{data['title']}')"
+        cursor.execute(sql)
+        connection.commit()
+
+    return render_template("custom.html", content="Pósturinn hefur verið sendur")
+
+@app.route("/breyta/<id>")
+def breyta(id):
+    pass
+
+@app.route("/breyta/<id>/submit")
+def subbreyta(id):
+    pass
+
+@app.route("/eyda/<id>")
+def eyda(id):
+    nafn = session.get("loggedin")
+    sql = f"delete from posts where id={id}"
+    sql2 = f"select * from posts where id={id}"
+    with connection.cursor() as cursor:
+        cursor.execute(sql2)
+        post = cursor.fetchone()
+        if post["username"] != nafn:
+            return render_template("custom.html", content="Forbidden")
+        else:
+            cursor.execute(sql)
+            connection.commit()
+    return render_template("custom.html", content="Pósti eytt!")
+
+    
 
 @app.errorhandler(404)
 def pagenotfound(error):
