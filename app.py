@@ -162,11 +162,32 @@ def createsubmit():
 
 @app.route("/breyta/<id>")
 def breyta(id):
-    pass
+    nafn = session.get("loggedin")
+    with connection.cursor() as cursor:
+        sql = f"select * from posts where id={id}"
+        cursor.execute(sql)
+        post = cursor.fetchone()
+        if post["username"] != nafn:
+            return render_template("custom.html", content="Forbidden")
+    return render_template("change.html", post=post)
 
-@app.route("/breyta/<id>/submit")
+@app.route("/breyta/<id>/submit", methods=["GET", "POST"])
 def subbreyta(id):
-    pass
+    if request.method == "POST":
+        data = {
+            "title":request.form["title"],
+            "post":request.form["post"]
+        }
+    with connection.cursor() as cursor:
+        sql = f"select * from posts where id={id}"
+        cursor.execute(sql)
+        post = cursor.fetchone()
+        nafn = session.get("loggedin")
+        if post["username"] != nafn:
+            return render_template("custom.html", content="Forbidden")
+        sql = f"update posts set title='{data['title']}', content='{data['post']}' where id='{id}';"
+        cursor.execute(sql)
+    return redirect(f"/post/{id}")
 
 @app.route("/eyda/<id>")
 def eyda(id):

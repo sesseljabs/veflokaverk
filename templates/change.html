@@ -1,0 +1,18 @@
+{% extends "default.html" %}
+{% block title %}
+Breyta
+{% endblock %}
+{% block content %}
+<form method="POST" action="/breyta/{{ post['id'] }}/submit">
+    <fieldset>
+        <legend>Breyta pósti</legend>
+        <label>Titill<br>
+            <input type="text" name="title" required value="{{ post['title'] }}"><br>
+        </label>
+        <label>Texti<br>
+            <textarea rows="10" cols="50" name="post" required>{{ post['content'] }}</textarea><br>
+        </label>
+        <input type="submit" value="Breyta pósti">
+    </fieldset>
+</form>
+{% endblock %}
