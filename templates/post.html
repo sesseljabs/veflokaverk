@@ -3,7 +3,9 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{ post["title"] }}</h1>
-<p style="font-size: 20px;">Sett inn af {{ post["username"] }} þann {{ post["posttime"] | date }}</p>
-<p>{{ post["content"] }}</p>
+<div id="post">
+<h1 id="posttitill">{{ post["title"] }}</h1>
+<p id="postname" style="font-size: 20px;">Sett inn af {{ post["username"] }} þann {{ post["posttime"] | date }}</p>
+<p id="postcontent">{{ post["content"] }}</p>
+</div>
 {% endblock %}
